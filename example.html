@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+    @package    SiteAnimator\Modules\EventManager
+
+    file:       example.html
+    function:   Demonstrates a event subscription service with the event manager module.
+
+    Last revision: 17-06-2022
+ 
+-->
+<html>
+    <head>
+        <title>Event Manager App</title>
+        <link id="favicon" href="https://www.siteanimator.com/logo/icon.ico" rel="shortcut icon" type="image/x-icon">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            
+            body {
+                background-color: black;
+                color: silver;
+                font-size: 1.2rem;
+                line-height: 1.8rem;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div style='padding-top: 20px;max-width: 800px; margin: 0 auto;'>
+        This is an example in the series of modules created for the Site Animator project.<br>
+        </div>
+
+        <div style='padding-top: 40px;max-width: 800px; margin: 0 auto;'>
+            <img src="https://www.siteanimator.com/logo/logo.png" alt="Site Animator">
+        </div>
+        
+        <div style='padding-top: 40px;max-width: 800px; margin: 0 auto;'>
+            
+            <a href='https://siteanimator.nl/en/blog'>Learn more about Javascript modules.</a><br>
+        <br>
+        <a href='https://siteanimator.nl/en/about-site-animator'>Learm more about SiteAnimator.</a><br>
+        <br>    
+        </div>
+        
+<script>
+                 
+    // set strict mode
+    "use strict";      
+    
+    // add the app object to the window
+    var eventManager = new function(){};
+   
+    // debug options
+    eventManager.options = {};
+    
+    eventManager.options.debugOptions = {
+        'on'            : false,
+        'layoutOptions' : {
+            'zIndex'    : 8000,
+            'top'       : 180,
+            'left'      : 120,
+            'width'     : 400,
+            'height'    : 300        
+        }
+    };
+    // debug options
+
+    // add window onload event
+    window.onload = function(){
+
+        // create main
+        eventManager.main = new eventManager.mainModule( eventManager.options );
+        
+        // start the application
+        eventManager.main.start();
+
+    };
+    // done add window onload event
+    
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="main.js"></script>
+<script src="./service/debuggerModule.js"></script>
+<script src="./service/htmlGeneratorModule.js"></script>
+<script src="./service/getUiIdModule.js"></script>
+<script src="./service/eventManagerModule.js"></script>
+<script src="./service/buttonModule.js"></script>
+<script src="./content/contentModule.js"></script>
+<script src="./content/titleModule.js"></script>
+<script src="./content/introModule.js"></script>
+<script src="./content/example/exampleModule.js"></script>
+<script src="./content/example/eventButtonModule.js"></script>
+<script src="./content/example/subscriptionButtonModule.js"></script>
+
+    </body>
+</html>
