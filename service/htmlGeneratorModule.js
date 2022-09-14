@@ -5,7 +5,7 @@
     function:   Generates a HTML string from JSON
                 adds the function generateHtml to the app
   
-    Last revision: 17-06-2022
+    Last revision: 11-09-2022
  
 */
 
@@ -31,27 +31,41 @@
             'iframe'                                        // string
         ];                                                  // done array
         self.valueProperties = [                            // array
-            'id',                                           // string
-            'name',                                         // string
-            'class',                                        // string
-            'type',                                         // string
-            'value',                                        // string
-            'src',                                          // string
-            'href',                                         // string
-            'target',                                       // string
-            'method',                                       // string
-            'action',                                       // string
-            'title',                                        // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
             'size',                                         // string
-            'cols',                                         // string
-            'rows',                                         // string
-            'width',                                        // string
-            'height',                                       // string
-            'maxlength',                                    // string
-            'rowspan',                                      // string
-            'colspan'                                       // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            '',                                             // string
+            ''                                              // string
         ];                                                  // done array
         self.properties = {                                 // array
+            'id'                :   'id',                   // string
+            'name'              :   'name',                 // string
+            'class'             :   'class',                // string
+            'type'              :   'type',                 // string
+            'value'             :   'value',                // string
+            'src'               :   'src',                  // string
+            'href'              :   'href',                 // string
+            'target'            :   'target',               // string
+            'method'            :   'method',               // string
+            'action'            :   'action',               // string
+            'title'             :   'title',                // string
+            'size'              :   'size',                 // string
+            'columns'           :   'cols',                 // string
+            'rows'              :   'rows',                 // string
+            'width'             :   'width',                // string
+            'height'            :   'height',               // string
+            'maximumLength'     :   'maxlength',            // string
+            'rowSpan'           :   'rowspan',              // string
+            'columnSpan'        :   'colspan',              // string
             'checked'           :   'checked',              // string
             'multiple'          :   'multiple',             // string
             'readOnly'          :   'readonly',             // string
@@ -135,105 +149,131 @@
         self.addApplicationsExtensions = function(){
         // FUNCTION: addApplicationsExtensions( void ) void            
         
-            // add generate
-            eventManager.generateHtml = self.generate;
+            // add prepend container
+            eventManager.prependContainer = self.prependContainer;
+        
+            // add append container
+            eventManager.appendContainer = self.appendContainer;
         
         // DONE FUNCTION: addApplicationsExtensions( void ) void
         };        
-        self.generate = function( json ){
-        // FUNCTION: generate( named array: json ) string
+        self.prependContainer = function( parentId, json ){
+        // FUNCTION: prependContainer( html element id: parentId, named array: json ) string
         
-            // create result
-            let result = '';
-        
-            // open element
-            result += self.openElement( json );
-            
-            // add text
-            result += self.addText( json );
-
-            // close element
-            result += self.closeElement( json );
-            
-            // return result
-            return result;
-        
-        // DONE FUNCTION: generate( named array: json ) string
-        };        
-        self.openElement = function( json ){
-        // FUNCTION: openElement( named array: json ) string
-        
-            // create result
-            let result = '';
-            
-            // open element
-            result += '<' + json['element'];
-            
-            // add properties
-            result += self.addProperties( json );
+            // create child
+            let child = self.createElement( json );
             
             // add style
-            result += self.addStyle( json );
+            self.addStyle( child, json );
             
-            // close open element
-            result += '>';
+            // add properties
+            self.addProperties( child, json );
             
-            // return result
-            return result;
+            // add text
+            self.addText( child, json );
             
-        // DONE FUNCTION: openElement( named array: json ) string
-        };        
-        self.closeElement = function( json ){
-        // FUNCTION: closeElement( named array: json ) string
+            // prepend child
+            self.prependChild( parentId, child );            
         
-            // create result
-            let result = '';
+        // DONE FUNCTION: prependContainer( html element id: parentId, named array: json ) string
+        };        
+        self.appendContainer = function( parentId, json ){
+        // FUNCTION: appendContainer( html element id: parentId, named array: json ) string
+        
+            // create child
+            let child = self.createElement( json );
             
-            // element in close elements
-            if( self.closeElements.indexOf( json['element'] ) >= 0 ){
-                
-                // close element
-                result += '</' + json['element'] + '>';
+            // add style
+            self.addStyle( child, json );
+            
+            // add properties
+            self.addProperties( child, json );
+            
+            // add text
+            self.addText( child, json );
+            
+            // append child
+            self.appendChild( parentId, child );            
+        
+        // DONE FUNCTION: appendContainer( html element id: parentId, named array: json ) string
+        };        
+        self.prependChild = function( parent, child ){
+        // FUNCTION: prependChild( html element / html element id: parent, html element: child ) void
+       
+            // parent is document body
+            if( parent === document.body ){
+
+                // add child
+                document.body.insertBefore( child, document.body.firstChild );
+
+                // done
+                return;
                 
             }
-            // element in close elements
+            // parent is document body
+       
+            // get parent element
+            let parentElement = document.getElementById( parent );
             
-            // return result
-            return result;
+            // add child
+            parentElement.insertBefore( child, parentElement.firstChild );
             
-        // DONE FUNCTION: closeElement( named array: json ) string
+        // DONE FUNCTION: prependChild( html element / html element id: parent, html element: child ) void
         };        
-        self.addProperties = function( json ){
-        // FUNCTION: addProperties( named array: json ) string
-        
-            // create result
-            let result = '';
-            
-            // loop over value properties
-            $.each( self.valueProperties, function( index, property ) {
-                
-                // property exists
-                if( json[property] !== undefined ){
-                    
-                    // add property
-                    result += ' ' + property + '="' + json[property]; 
-                    result += '"';
-                    // add property
-                    
-                }
-                // property exists
-                
-            });
-            // loop over value properties
+        self.appendChild = function( parent, child ){
+        // FUNCTION: appendChild( html element / html element id: parent, html element: child ) void
+       
+            // parent is document body
+            if( parent === document.body ){
 
+                // add child
+                document.body.appendChild( child );
+
+                // done
+                return;
+                
+            }
+            // parent is document body
+       
+            // get parent element
+            let parentElement = document.getElementById( parent );
+            
+            // add child
+            parentElement.appendChild( child );
+            
+        // DONE FUNCTION: appendChild( html element / html element id: parent, html element: child ) void
+        };        
+        self.createElement = function( json ){
+        // FUNCTION: createElement( named array: json ) string
+       
+            // create element
+            let element = document.createElement( json['element'] );
+            
+            // id is set
+            if( json['id'] !== undefined ){
+                
+                // set id
+                element.id = json['id'];
+            
+            }
+            // id is set
+            
+            // create element
+            return element;
+            
+        // DONE FUNCTION: createElement( named array: json ) string
+        };        
+        self.addProperties = function( child, json ){
+        // FUNCTION: addProperties( html element: child, named array: json ) string
+        
             // loop over properties
-            $.each( self.properties, function( index, property ) {
+            Object.entries( self.properties ).forEach( ( [key, value] ) => {
                 
                 // property exists
-                if( json[index] !== undefined ){
+                if( json[key] !== undefined ){
                     
-                    // add property
-                    result += ' ' + property + ' ';
+                    // set property
+                    child.setAttribute( value, json[key] );
                     
                 }
                 // property exists                
@@ -241,28 +281,22 @@
             });
             // loop over properties
                         
-            // return result
-            return result;
-            
-        // DONE FUNCTION: addProperties( named array: json ) string
+        // DONE FUNCTION: addProperties( html element: child, named array: json ) string
         };        
-        self.addStyle = function( json ){
-        // FUNCTION: addStyle( named array: json ) string
+        self.addStyle = function( element, json ){
+        // FUNCTION: addStyle( html element: child, named array: json ) string
         
-            // create result
-            let result = '';
+            // create style
+            let style = '';
             
-            // open style
-            result += ' style="';
-
             // loop over styles
-            $.each( self.styles, function( index, style ) {
+            Object.entries( self.styles ).forEach( ( [key, value] ) => {
                 
                 // style is defined
-                if( json[index] !== undefined ){
+                if( json[key] !== undefined ){
                     
                     // add style
-                    result += style + ' : ' + json[index] + ';';
+                    style += value + ' : ' + json[key] + ';';
                     
                 }
                 // style is defined
@@ -271,15 +305,18 @@
             // loop over styles
             
             // add border
-            result += self.addBorder( json );
+            style += self.addBorder( json );
             
-            // close style
-            result += '"';
+            // style ! empty
+            if( style !== '' ){
+                
+                // set style
+                element.setAttribute ( 'style', style );
             
-            // return result
-            return result;
+            }
+            // style ! empty
             
-        // DONE FUNCTION: addStyle( named array: json ) string
+        // DONE FUNCTION: addStyle( html element, named array: json ) string
         };        
         self.addBorder = function( json ){
         // FUNCTION: addBorder( named array: json ) string
@@ -288,14 +325,15 @@
             let result = '';
 
             // loop over borders
-            $.each( self.borders, function( index, border ) {
+             Object.entries( self.borders ).forEach( ( [key, value] ) => {
                 
                 // border is defined
-                if( json[index] !== undefined ){
+                if( json[key] !== undefined ){
                     
                     // add border
-                    result += border + ':';
+                    result += value + ':';
                     
+                    // get border html
                     result += self.getBorderHtml( json );
                     
                 }
@@ -327,31 +365,25 @@
             
         // DONE FUNCTION: getBorderHtml( named array: json ) string
         };        
-        self.addText = function( json ){
-        // FUNCTION: addText( named array: json ) string
+        self.addText = function( element, json ){
+        // FUNCTION: addText( html element, named array: json ) string
         
-            // create result
-            let result = '';
-            
             // has text
             if( json['text'] ){
                 
-                // add text
-                result += json['text'];
+                // set text
+                element.innerHTML = json['text'];
                 
             }
             // has text
             
-            // return result
-            return result;
-            
-        // DONE FUNCTION: addText( named array: json ) string
+        // DONE FUNCTION: addText( html element, named array: json ) string
         };        
         self.debug = function( message ) {
         // FUNCTION: debug( string: message ) void
             
             // debug on
-            if( self.debugOn && eventManager.debug ) {
+            if( self.debugOn && htmlGenerator.debug ) {
                 
                 // debug
                 eventManager.debug( self.moduleName + ' ' + message );

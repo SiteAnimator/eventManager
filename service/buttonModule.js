@@ -5,7 +5,7 @@
     function:   creates a HTML element and handels the events
                 handles state changes
 
-    Last revision: 09-08-2022
+    Last revision: 14-09-2022
  
 */    
 
@@ -14,14 +14,14 @@
         
     // MODULE: buttonModule( html element id: parentId, 
     //                       named array: options,
-    //                       named array: callbacks  ) named array
+    //                       named array: callbacks ) named array
         
     // create name space
     eventManager.service = eventManager.service ? eventManager.service : {};
     
     eventManager.service.buttonModule = function( parentId, 
-                                                  options, 
-                                                  callbacks ) {
+                                               options, 
+                                               callbacks ) {
         // PRIVATE:
 
         // MEMBERS:
@@ -45,32 +45,7 @@
             // add events
             self.addEvents();
             
-            // event subscription
-            self.addEventSubscriptions();
-            
         // DONE FUNCTION: construct( void ) void
-        };
-        self.addEventSubscriptions = function(){
-        // FUNCTION: layoutChange( void ) void
-        
-            // subscribe to disable ui events
-            eventManager.subscribeToEvent( 'disableUiEvents', self.disable );
-            
-            // subscribe to enable ui events
-            eventManager.subscribeToEvent( 'enableUiEvents', self.enable );
-            
-        // DONE FUNCTION: layoutChange( void ]) void
-        };
-        self.removeEventSubscriptions = function(){
-        // FUNCTION: removeEventSubscriptions( void ) void
-        
-            // unsubscribe from disable ui events
-            eventManager.unSubscribeFromEvent( 'disableUiEvents', self.disable );
-            
-            // unsubscribe from enable ui events
-            eventManager.unSubscribeFromEvent( 'enableUiEvents', self.enable );
-            
-        // DONE FUNCTION: removeEventSubscriptions( void ]) void
         };
         self.addHtml = function() {
         // FUNCTION: addHtml( void ) void
@@ -79,7 +54,7 @@
             self.debug( 'addHtml' );
 
             // add container to parent
-            $( '#' + self.parentId ).append( eventManager.generateHtml( self.options ) );
+            eventManager.appendContainer( self.parentId, self.options );
 
         // DONE FUNCTION: addHtml( void ) void
         };
@@ -90,7 +65,7 @@
             self.debug( 'removeHtml' );
 
             // remove container
-            $( '#' + self.options['id'] ).remove();
+            eventManager.getElementById( self.options['id'] ).remove();
             
         // DONE FUNCTION: removeHtml( void ) void
         };
@@ -115,7 +90,7 @@
             if( self.callbacks['mouseOver'] !== undefined ){
             
                 // add mouse over
-                $( '#' + self.options['id'] ).mouseover( function( event ){ self.mouseOver( event ); }); 
+                eventManager.getElementById( self.options['id'] ).addEventListener( 'mouseover' , self.mouseOver ); 
                 
             }
             // mouse over callback exists
@@ -124,7 +99,7 @@
             if( self.callbacks['mouseOut'] !== undefined ){
             
                 // add mouse out
-                $( '#' + self.options['id'] ).mouseout( function( event ){ self.mouseOut(event ); }); 
+                eventManager.getElementById( self.options['id'] ).addEventListener( 'mouseout' , self.mouseOut ); 
                 
             }
             // mouse out callback exists
@@ -133,7 +108,7 @@
             if( self.callbacks['click'] !== undefined ){
             
                 // add click
-                $( '#' + self.options['id'] ).click( function( event ){ self.click( event ); });  
+                eventManager.getElementById( self.options['id'] ).addEventListener( 'click' , self.click ); 
                 
             }
             // click callback exists
@@ -147,7 +122,7 @@
             if( self.callbacks['keyUp'] !== undefined ){
 
                 // add key up 
-                $( '#' + self.options['id'] ).keyup( function( ){ self.keyUp( event ); });
+                eventManager.getElementById( self.options['id'] ).addEventListener( 'keyup' , self.keyUp ); 
                 
             }
             // key up callback exists
@@ -156,7 +131,7 @@
             if( self.callbacks['keyDown'] !== undefined ){
 
                 // add key down
-                $( '#' + self.options['id'] ).keydown( function( ){ self.keyDown( event ); });
+                eventManager.getElementById( self.options['id'] ).addEventListener( 'keydown' , self.keyDown ); 
                 
             }
             // key down callback exists
@@ -164,12 +139,73 @@
         // DONE FUNCTION: addKeyEvents( void ) void
         };            
         self.removeEvents = function() {
-        // FUNCTION: removeEvents( void ) void
+        // FUNCTION: removeEvents( void ) void        
+         
+            // debug info
+            self.debug( 'removeEvents: ' + self.options['id']);
         
-            // remove button events
-            $( '#' + self.options['id'] ).off( );
+            // remove basic
+            self.removeBasicEvents();
+
+            // remove key events
+            self.removeKeyEvents();
             
         // DONE FUNCTION: removeEvents( void ) void
+        };            
+        self.removeBasicEvents = function() {
+        // FUNCTION: removeBasicEvents( void ) void
+            
+            // mouse over callback exists
+            if( self.callbacks['mouseOver'] !== undefined ){
+            
+                // add mouse over
+                eventManager.getElementById( self.options['id'] ).removeEventListener( 'mouseover' , self.mouseOver ); 
+                
+            }
+            // mouse over callback exists
+            
+            // mouse out callback exists
+            if( self.callbacks['mouseOut'] !== undefined ){
+            
+                // add mouse out
+                eventManager.getElementById( self.options['id'] ).removeEventListener( 'mouseout' , self.mouseOut ); 
+                
+            }
+            // mouse out callback exists
+            
+            // click callback exists
+            if( self.callbacks['click'] !== undefined ){
+            
+                // add click
+                eventManager.getElementById( self.options['id'] ).removeEventListener( 'click' , self.click ); 
+                
+            }
+            // click callback exists
+
+        // DONE FUNCTION: removeBasicEvents( void ) void
+        };            
+        self.removeKeyEvents = function() {
+        // FUNCTION: removeKeyEvents( void ) void
+            
+            // key up callback exists
+            if( self.callbacks['keyUp'] !== undefined ){
+
+                // add key up 
+                eventManager.getElementById( self.options['id'] ).removeEventListener( 'keyup' , self.keyUp ); 
+                
+            }
+            // key up callback exists
+            
+            // key down callback exists
+            if( self.callbacks['keyDown'] !== undefined ){
+
+                // add key down
+                eventManager.getElementById( self.options['id'] ).removeEventListener( 'keydown' , self.keyDown ); 
+                
+            }
+            // key down callback exists
+            
+        // DONE FUNCTION: removeKeyEvents( void ) void
         };            
         self.mouseOver = function( event ){
         // FUNCTION: mouseOver( event: event ) void
@@ -231,7 +267,7 @@
                 self.options['images']['highlight'] !== undefined    ){
                 
                 // mouse over -> highlight image
-                $( '#' + self.options['id'] ).css( 'background-image', self.options['images']['highlight'] );
+                eventManager.getElementById( self.options['id'] ).style.backgroundImage = self.options['images']['highlight'];
                 
             }
             // has images and highlight image
@@ -246,7 +282,7 @@
                 if( colors['highlight'] !== undefined ){
                 
                     // set color highlight 
-                    $( '#' + self.options['id'] ).css( 'color', colors['highlight'] );
+                    eventManager.getElementById( self.options['id'] ).style.color = colors['highlight'];
                 
                 }
                 // has highlight color
@@ -256,7 +292,7 @@
                     colors['background']['highlight'] !== undefined ){
                 
                     // set background color highlight 
-                    $( '#' + self.options['id'] ).css( 'background-color', colors['background']['highlight'] );
+                    eventManager.getElementById( self.options['id'] ).style.backgroundColor = colors['background']['highlight'];
                 
                 }
                 // has background colors and background highlight color
@@ -266,7 +302,7 @@
                     colors['border']['highlight'] !== undefined ){
                 
                     // set border color highlight 
-                    $( '#' + self.options['id'] ).css( 'border-color', colors['border']['highlight'] );
+                    eventManager.getElementById( self.options['id'] ).style.borderColor = colors['border']['highlight'];
                 
                 }
                 // has border colors and border highlight color
@@ -284,7 +320,7 @@
                 self.options['images']['disabled'] !== undefined ){
                 
                 // set disabled image
-                $( '#' + self.options['id'] ).css( 'background-image', self.options['images']['disabled'] );
+                eventManager.getElementById( self.options['id'] ).style.backgroundImage = self.options['images']['disabled'];
                 
             }
             // has images and disabled image
@@ -299,7 +335,7 @@
                 if( colors['disabled'] !== undefined ){
                 
                     // set color disabled 
-                    $( '#' + self.options['id'] ).css( 'color', colors['disabled'] );
+                    eventManager.getElementById( self.options['id'] ).style.color = colors['disabled'];
                 
                 }
                 // has disabled color
@@ -309,7 +345,7 @@
                     colors['background']['disabled'] !== undefined ){
                 
                     // set background color disabled 
-                    $( '#' + self.options['id'] ).css( 'background-color', colors['background']['disabled'] );
+                    eventManager.getElementById( self.options['id'] ).style.backgroundColor = colors['background']['disabled'];
                 
                 }
                 // has background colors and background disabled color
@@ -319,7 +355,7 @@
                     colors['border']['disabled'] !== undefined ){
                 
                     // set border color disabled 
-                    $( '#' + self.options['id'] ).css( 'border-color', colors['border']['disabled'] );
+                    eventManager.getElementById( self.options['id'] ).style.borderColor = colors['border']['disabled'];
                 
                 }
                 // has border colors and border disabled color
@@ -337,7 +373,7 @@
                 self.options['images']['image'] !== undefined ){
                 
                 // set image url 
-                $( '#' + self.options['id'] ).css( 'background-image', self.options['images']['image'] );
+                eventManager.getElementById( self.options['id'] ).style.backgroundImage = self.options['images']['image'];
                 
             }
             // has images and image 
@@ -352,7 +388,7 @@
                 if( colors['color'] !== undefined ){
                 
                     // set color
-                    $( '#' + self.options['id'] ).css( 'color', colors['color'] );
+                    eventManager.getElementById( self.options['id'] ).style.color = colors['color'];
                 
                 }
                 // has color
@@ -362,7 +398,7 @@
                     colors['background']['color'] !== undefined ){
                 
                     // set background color
-                    $( '#' + self.options['id'] ).css( 'background-color', colors['background']['color'] );
+                    eventManager.getElementById( self.options['id'] ).style.backgroundColor = colors['background']['color'];
                 
                 }
                 // has background colors and background color
@@ -372,7 +408,7 @@
                     colors['border']['color'] !== undefined ){
                 
                     // set border color
-                    $( '#' + self.options['id'] ).css( 'border-color', colors['border']['color'] );
+                    eventManager.getElementById( self.options['id'] ).style.borderColor = colors['border']['color'];
                 
                 }
                 // has border colors and border color
@@ -521,9 +557,6 @@
         self.destruct = function() {
         // FUNCTION: destruct( void ) void
             
-            // remove event subscriptions
-            self.removeEventSubscriptions();
-            
             // remove events
             self.removeEvents();
             
@@ -625,7 +658,7 @@
     };
     // DONE MODULE: buttonModule( html element id: parentId, 
     //                            named array: options,
-    //                            named array: callbacks  ) named array
+    //                            named array: callbacks ) named array
     
 })( eventManager );
 // done create module function

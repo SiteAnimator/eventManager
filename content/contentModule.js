@@ -2,9 +2,9 @@
         @package    SiteAnimator/Modules/EventManager
   
         file:       contentModule.js
-        function:   Generates a HTML element for the content.
+        function:   Generates the HTML for the content.
   
-        Last revision: 16-06-2022
+        Last revision: 12-09-2022
  
 */
 
@@ -54,10 +54,10 @@
         // FUNCTION: createHtml( void ) void
 
             // create container
-            $( document.body ).prepend( eventManager.generateHtml( self.containerOptions ) );
+            eventManager.prependContainer( document.body, self.containerOptions );
             
             // add content to container
-            $( '#' + self.containerOptions['id'] ).append( eventManager.generateHtml( self.contentOptions ) );
+            eventManager.appendContainer( self.containerOptions['id'], self.contentOptions );
         
         // DONE FUNCTION: createHtml( void ) void
         };

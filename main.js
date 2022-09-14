@@ -2,9 +2,11 @@
     @package    SiteAnimator\Modules\EventManager
 
     file:       main.js
-    function:   This file contains the main application module.    
+    function:   This file contains the main application module.  
+                handels start after page load
+                creates service modules
                 
-    Last revision: 16-06-2022
+    Last revision: 12-09-2022
  
 */    
 
@@ -40,11 +42,14 @@
             self.modules.debugger = new eventManager.service.debuggerModule( self.options['debugOptions'] );
 
             // create get ui id module
-            self.modules.getUiIdModule = new eventManager.service.getUiIdModule( );
+            self.modules.getUiId = new eventManager.service.getUiIdModule( );
 
             // create html generator module
             self.modules.htmlGenerator = new eventManager.service.htmlGeneratorModule( );
 
+            // create get element module
+            self.modules.getElement = new eventManager.service.getElementModule( );
+            
             // create event manager module
             self.modules.eventManager = new eventManager.service.eventManagerModule( );
 

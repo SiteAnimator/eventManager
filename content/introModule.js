@@ -4,7 +4,7 @@
         file:       introModule.js
         function:   Creates the HTML for the intro.
   
-        Last revision: 16-06-2022
+        Last revision: 14-09-2022
  
 */
 
@@ -32,13 +32,13 @@
         self.titleOptions = {                               // named array 
             'id'                    :   eventManager.getUiId( self.moduleName + 'Title' ), // string 
             'element'               :   'div',              // html element type 
-            'text'                  :   'This is a demonstration of Javascript application build with modules.',  // string 
+            'text'                  :   'This is an event manager.',  // string 
             'readOnly'              :   true,               // boolean
             'textAlign'             :   'center',           // css
             'styleWidth'            :   '100%',             // css
             'styleHeight'           :   '100%',             // css
             'backgroundColor'       :   'transparent',      // css
-            'color'                 :   'darkGoldenRod',    // css
+            'color'                 :   'LightSeaGreen',    // css
             'fontSize'              :   '1.2rem',           // css
             'marginTop'             :   '1rem',             // css
         };                                                  // done named array  
@@ -53,8 +53,8 @@
             'styleWidth'            :   '100%',             // css
             'styleHeight'           :   '100%',             // css
             'backgroundColor'       :   'transparent',      // css
-            'color'                 :   'darkGoldenRod',    // css
-            'fontSize'              :   '1.2rem',           // css
+            'color'                 :   'Peru',             // css
+            'fontSize'              :   '1.0rem',           // css
             'marginTop'             :   '1rem',             // css
         };                                                  // done named array  
         // DONE MEMBERS     
@@ -75,13 +75,13 @@
         // FUNCTION: createHtml( void ) void
 
             // create container
-            $( '#' + self.parentId ).append( eventManager.generateHtml( self.containerOptions ) );
+            eventManager.appendContainer( self.parentId, self.containerOptions );
             
             // add title to container
-            $( '#' + self.containerOptions['id'] ).append( eventManager.generateHtml( self.titleOptions ) );
+            eventManager.appendContainer( self.containerOptions['id'], self.titleOptions );
         
             // add intro to container
-            $( '#' + self.containerOptions['id'] ).append( eventManager.generateHtml( self.introOptions ) );
+            eventManager.appendContainer( self.containerOptions['id'], self.introOptions );
         
         // DONE FUNCTION: createHtml( void ) void
         };

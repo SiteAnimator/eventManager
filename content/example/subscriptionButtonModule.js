@@ -5,7 +5,7 @@
         function:   Generates a button to subscribe to an event or
                     unsubscribe from an event.
   
-        Last revision: 04-08-2022
+        Last revision: 12-09-2022
  
 */
 
@@ -42,6 +42,7 @@
             'borderWidth'           :   '1px',              // css
             'borderStyle'           :   'solid',            // css
             'borderRadius'          :   '4px',              // css
+            'cursor'                :   'pointer',          // css
             'state' : {                                     // named array
                 'active'                    : false         // boolean
             },                                              // done named array
@@ -121,13 +122,16 @@
             // create button
             self.createButton();
   
+            // show state
+            self.showState();
+  
         // DONE FUNCTION: construct( void ) void
         };
         self.createHtml = function() {
         // FUNCTION: createHtml( void ) void
 
             // create container
-            $( '#' + self.parentId ).append( eventManager.generateHtml( self.containerOptions ) );
+            eventManager.appendContainer( self.parentId, self.containerOptions );
             
         // DONE FUNCTION: createHtml( void ) void
         };
@@ -181,7 +185,7 @@
             // set text
                        
             // set text
-            $( '#' + self.buttonOptions['id'] ).html( text );
+            eventManager.getElementById( self.buttonOptions['id'] ).innerHTML = text;
             
             // set colors
             self.buttonOptions['colors'] = activeState ? 
@@ -311,7 +315,7 @@
             let text = self.eventOptions['states']['highlight']['text'];
                        
             // set text
-            $( '#' + self.buttonOptions['id'] ).html( text );
+            eventManager.getElementById( self.buttonOptions['id'] ).innerHTML = text;
             
             // set colors
             self.buttonOptions['colors'] = self.eventOptions['states']['highlight']['colors'];

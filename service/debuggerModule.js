@@ -6,7 +6,7 @@
                     adds the funtion: 'debug' to the application;
                     displays messages send through the debug function
   
-        Last revision: 17-16-2022
+        Last revision: 14-09-2022
  
 */
 
@@ -48,7 +48,7 @@
                 'background'    :   'black',                // color
                 'color'         :   'lightgrey',            // color
             }                                               // done named array  
-        };                                                  // done named array  
+        };                                                  // done named array 
         self.lastPosition = null;                           // named array / null
         self.lineCounter = 0;                               // integer
         // DONE MEMBERS     
@@ -118,8 +118,20 @@
             // set on
             self.on = options['on'] !== undefined && options['on'] === true ? true : false; 
             
-            // extend layout
-            self.layoutOptions = jQuery.extend( self.layoutOptions, options['layoutOptions'] );           
+            // loop over layout options
+            for( let index of Object.keys( self.layoutOptions ) ){
+            
+                // over ride option exists
+                if( options['layoutOptions'][index] !== undefined ){
+            
+                    // set value
+                    self.layoutOptions[index] = options['layoutOptions'][index];
+                    
+                }
+                // over ride option exists
+                
+            }
+            // loop over layout options
             
         // DONE FUNCTION: extendOptions( void ) void
         };
@@ -158,22 +170,27 @@
             // get layout options
             let layoutOptions = self.layoutOptions;
 
-            // create the html
-            let html = '<div id="' + elementIds['container'] + '" ';
-                html += 'style="';
-                    html += ' position:absolute; ';
-                    html += ' top: ' + layoutOptions['top'] + 'px; ';
-                    html += ' left: ' + layoutOptions['left'] + 'px;';
-                    html += ' z-index: ' + layoutOptions['zIndex'] + ';';
-                    html += ' background-color: ' + colors['background'] + ' 1px groove; ';
-                    html += ' border: ' + colors['border'] + ' 1px groove; ';
-                    html += ' border-radius: 5px; ';
-                html += '"';
-            html += '>';
-            // done create html
+            // create style
+            let style = 'position:absolute; ' +
+                        'top: ' + layoutOptions['top'] + 'px; ' +
+                        'left: ' + layoutOptions['left'] + 'px;' + 
+                        'z-index: ' + layoutOptions['zIndex'] + ';' +
+                        'background-color: ' + colors['background'] + ';' +
+                        'border: ' + colors['border'] + ' 1px groove;' +
+                        'border-radius: 5px;';
+            // create style
             
-            // add container
-            $( document.body ).append( html );
+            // create the div
+            let div = document.createElement('div');
+            
+            // set id
+            div.id = elementIds['container'];
+            
+            // set style
+            div.setAttribute ( 'style', style );
+            
+            // add child
+            document.body.appendChild( div );
             
         // DONE FUNCTION: createContainer( void ) void
         };
@@ -186,22 +203,31 @@
             // get colors
             let colors = self.colors;
 
-            // create the html
-            let html = '<div id="' + elementIds['dragHandle'] + '" ';
-                    html += 'style="';
-                        html += ' height:20px; ';
-                        html += ' padding-left: 14px; ';
-                        html += ' padding-top: 4px; ';
-                        html += ' background-color:' + colors['dragHandle']['background'] + '; ';
-                        html += ' font-size:12px;font-family:times new roman';
-                    html += '"';
-                html += '>';
-                        html += 'Debugger';
-                html += '</div>';
-                // create the html
+            // create style
+            let style = 'height:24px;' +
+                        'padding-left: 4px; ' +
+                        'padding-top: 1px;' +
+                        'background-color:' + colors['dragHandle']['background'] + ';' +
+                        'font-size:14px;font-family:times new roman';
+            // create style
+                
+            // create the div
+            let div = document.createElement('div');
             
-            // add drag handle
-            $( '#' + elementIds['container'] ).append( html );
+            // set id
+            div.id = elementIds['dragHandle'];
+            
+            // set style
+            div.setAttribute ( 'style', style );
+            
+            // set text
+            div.innerHTML = 'Debugger';
+            
+            // get container
+            let container = document.getElementById( self.elementIds['container'] );
+            
+            // add child
+            container.appendChild( div );
             
         // DONE FUNCTION: createDragHandle( void ) void
         };
@@ -217,24 +243,29 @@
             // get layout options
             let layoutOptions = self.layoutOptions;
 
-            // create the html
-            let html = '<div id="' + elementIds['content'] + '" ';
-                    html += 'style="';
-                        html += ' overflow: auto; ';
-                        html += ' width: ' + layoutOptions['width'] + 'px; ';
-                        html += ' height: ' + layoutOptions['height'] + 'px;';
-                        html += ' background-color:' + colors['content']['background'] + ';';
-                        html += ' color:' + colors['content']['color'] + ';';
-                        html += ' font-size:18px;font-family:times new roman';
-                    html += '"';
-                html += '>';
-                    
-                html += '</div>';
-            html += '</div>';
-            // create the html
+            // create style
+            let style = 'overflow: auto;' +
+                        'width: ' + layoutOptions['width'] + 'px;' +
+                        'height: ' + layoutOptions['height'] + 'px;' +
+                        'background-color:' + colors['content']['background'] + ';' +
+                        'color:' + colors['content']['color'] + ';' +
+                        'font-size:18px;font-family:times new roman';
+            // create style
+                        
+            // create the div
+            let div = document.createElement('div');
             
-            // add content
-            $( '#' + elementIds['container'] ).append( html );
+            // set id
+            div.id = elementIds['content'];
+            
+            // set style
+            div.setAttribute ( 'style', style );
+            
+            // get container
+            let container = document.getElementById( self.elementIds['container'] );
+            
+            // add child
+            container.appendChild( div );
             
         // DONE FUNCTION: createContent( void ) void
         };
@@ -250,10 +281,13 @@
             }
             // debug ! on
 
+            // get drag handle
+            let dragHandle = document.getElementById( self.elementIds['dragHandle'] );
+
             // add drag events
-            $( "#" + self.elementIds['dragHandle'] ).mouseenter( function( ){ self.dragHandleMouseIn(); } );
-            $( "#" + self.elementIds['dragHandle'] ).mouseout( function(){ self.dragHandleMouseOut(); } );
-            $( "#" + self.elementIds['dragHandle'] ).mousedown( function( event ){ self.dragHandleMouseDown( event ); } );
+            dragHandle.addEventListener( 'mouseenter', self.dragHandleMouseIn );
+            dragHandle.addEventListener( 'mouseout', self.dragHandleMouseOut );
+            dragHandle.addEventListener( 'mousedown', self.dragHandleMouseDown );
             // add drag events
 
         // DONE FUNCTION: addEvents( void ) void
@@ -264,8 +298,11 @@
             // get drag handle colors
             let colors = self.colors['dragHandle'];
             
+            // get drag handle
+            let dragHandle = document.getElementById( self.elementIds['dragHandle'] );
+
             // highlight draghandle
-            $( "#" + self.elementIds['dragHandle'] ).css('background-color', colors['highlight'] );
+            dragHandle.style.backgroundColor = colors['highlight'];
             
         // DONE FUNCTION: dragHandleMouseIn( void ) void
         };
@@ -275,8 +312,11 @@
             // get drag handle colors
             let colors = self.colors['dragHandle'];
             
-            // reset draghandle bckground
-            $( "#" + self.elementIds['dragHandle'] ).css('background-color', colors['background'] );
+            // get drag handle
+            let dragHandle = document.getElementById( self.elementIds['dragHandle'] );
+
+            // reset draghandle
+            dragHandle.style.backgroundColor = colors['background'];
             
         // DONE FUNCTION: dragHandleMouseOut( void ) void
         };
@@ -287,8 +327,8 @@
             self.lastPosition = { 'x' : event.pageX, 'y' : event.pageY };
             
             // add events
-            $( document ).on( 'mousemove', function( event ) { self.move( event ); } );
-            $( document ).on( 'mouseup', function( event ) { self.up( event ); } );
+            document.addEventListener( 'mousemove', self.move );
+            document.addEventListener( 'mouseup', self.up );
             // add events
             
         // DONE FUNCTION: dragHandleMouseDown( void ) void
@@ -305,29 +345,23 @@
             self.positionChange['y'] = self.lastPosition['y'] - event.pageY;
             self.positionChange['x'] = self.lastPosition['x'] - event.pageX;
             
-            // get left
-            let left = parseInt( $( "#" + self.elementIds['container'] ).offset().left );
+            // get container
+            let container = document.getElementById( self.elementIds['container'] );
             
             // subtract change x
-            left -= parseInt( self.positionChange['x'] );
+            let left = parseInt( container.style.left.replace( 'px', '' ) ) - parseInt( self.positionChange['x'] );
                     
-            // set minimum 
-            left = Math.max( 0, left );
+            // set left 
+            container.style.left = Math.max( 0, left ) + 'px';
 
-            // set left
-            $( "#" + self.elementIds['container'] ).css( 'left', left + 'px' );
-            
             // get top
-            let top = parseInt( $( "#" + self.elementIds['container'] ).offset().top );
+            let top = parseInt( container.style.top.replace( 'px', '' ) ) - parseInt( self.positionChange['y'] );
             
-            // subtract change y
-            top -= parseInt( self.positionChange['y'] );
-
             // set minimum 
             top = Math.max( 0, top );
             
             // set top
-            $( "#" + self.elementIds['container'] ).css( 'top', top + 'px' );
+            container.style.top = Math.max( 0, top ) + 'px';
             
             // remember last position
             self.lastPosition = { 'x' : event.pageX, 'y' : event.pageY };
@@ -336,8 +370,8 @@
         self.up = function( event ) { 
             
             // remove events
-            $(document).off( 'mousemove' );
-            $(document).off( 'mouseup' );
+            document.removeEventListener( 'mousemove', self.move );
+            document.removeEventListener( 'mouseup', self.up );
             // remove events
             
         }; 

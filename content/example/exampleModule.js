@@ -4,7 +4,7 @@
         file:       exampleModule.js
         function:   Generates a HTML element for the content.
   
-        Last revision: 16-06-2022
+        Last revision: 12-09-2022
  
 */
 
@@ -79,10 +79,10 @@
         // FUNCTION: createHtml( void ) void
 
             // create container
-            $( '#' + self.parentId ).append( eventManager.generateHtml( self.containerOptions ) );
+            eventManager.appendContainer( self.parentId, self.containerOptions );
             
             // add content to container
-            $( '#' + self.containerOptions['id'] ).append( eventManager.generateHtml( self.contentOptions ) );
+            eventManager.appendContainer( self.containerOptions['id'], self.contentOptions );
         
         // DONE FUNCTION: createHtml( void ) void
         };
@@ -90,10 +90,10 @@
         // FUNCTION: createContent( void ) void
 
             // create left panel
-            $( '#' + self.contentOptions['id'] ).append( eventManager.generateHtml( self.leftPanelOptions ) );
+            eventManager.appendContainer( self.contentOptions['id'], self.leftPanelOptions );
             
             // create right panel
-            $( '#' + self.contentOptions['id'] ).append( eventManager.generateHtml( self.rightPanelOptions ) );
+            eventManager.appendContainer( self.contentOptions['id'], self.rightPanelOptions );
             
             // create buttons
             self.createButtons();

@@ -2,9 +2,9 @@
         @package    SiteAnimator/Modules/EventManager
   
         file:       eventButtonModule.js
-        function:   Generates a button to call an event.
+        function:   Creates a button to call an event.
   
-        Last revision: 04-08-2022
+        Last revision: 12-09-2022
  
 */
 
@@ -49,6 +49,7 @@
                     'highlight'     :   'red'               // color
                 }                                           // done named array
             },                                              // done named array
+            'cursor'                :   'pointer',          // css
         };                                                  // done named array  
         self.modules = {};                                  // named array
         // DONE MEMBERS     
@@ -72,7 +73,7 @@
         // FUNCTION: createHtml( void ) void
 
             // create container
-            $( '#' + self.parentId ).append( eventManager.generateHtml( self.containerOptions ) );
+            eventManager.appendContainer( self.parentId, self.containerOptions );
             
         // DONE FUNCTION: createHtml( void ) void
         };
